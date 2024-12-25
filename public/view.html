@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Upload Restaurant Menu</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="menu">Select a menu image:</label>
+        <input type="file" id="menu" name="menu" accept="image/*" required />
+        <button type="submit">Upload</button>
+    </form>
+    <div id="response" class="response"></div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const responseDiv = document.getElementById('response');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Upload failed: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                esponseDiv.textContent = `Upload successful! JSON output:\n\n${JSON.stringify(result, null, 4)}`;
+            } catch (error) {
+                responseDiv.textContent = `Error: ${error.message}`;
+                responseDiv.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+    
+</body>
+</html>
